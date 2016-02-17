@@ -1,0 +1,59 @@
+//this script will create records based on the input fields filled out in the record producer. Creating multiple records from one
+//submit of a record producer. Useful for data entry forms that will insert data for data collection around Performance Analytics.
+//the below Catalog Client Script will generate two records upon submittal.
+
+function onSubmit() {
+
+  // start the glide record and get values for the input fields
+	var gr = new GlideRecord(table);
+  
+  //these arrays will hold field name values
+	var array1 = ["u_example", "u_example2"];
+  
+  var array2 = ["u_another_example", "u_another_example2"];
+    
+  var array3 = ["u_and_another_example" , "u_and_another_example2"];
+    
+	var date = g_form.getValue('u_date');
+	var project = g_form.getValue('u_project');
+	var employee = g_form.getValue('u_employee_id');
+	
+function glideInit() {
+	//initialize the insert of values
+	gr.initialize();
+	//gr.u_department = department;
+	gr.u_project = project;
+	gr.u_date = date;
+	gr.u_employee_id = employee;
+	
+}
+
+
+	//This will insert the record
+	if (g_form.getValue(array1[0]) != ""){
+	
+		glideInit();
+	gr.u_amount = g_form.getValue(array1[0]);
+	gr.u_amount2 = g_form.getValue(array2[0]);
+	gr.u_amount3 = g_form.getValue(array3[0]);
+	//assign the a category to the value
+	gr.u_choice_list = 1;
+	gr.insert();
+		
+}
+
+	if (g_form.getValue(array1[1]) != ""){
+	
+		glideInit();
+	gr.u_amount = g_form.getValue(array1[1]);
+	gr.u_amount2 = g_form.getValue(array2[1]);
+	gr.u_amount3 = g_form.getValue(array3[1]);
+	//assign the a category to the value
+	gr.u_choice_list = 1;
+	gr.insert();
+		
+	
+	
+}
+
+}
