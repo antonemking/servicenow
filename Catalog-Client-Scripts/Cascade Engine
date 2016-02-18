@@ -9,9 +9,9 @@ function onSubmit() {
     //record producer variable names
 	var field = ["example1", "example2", "example3", "example4", "example5"];
     //record producer variable names
-    var odr = ["t1", "t2", "t3" , "t4", "t5"];
+    var field2 = ["t1", "t2", "t3" , "t4", "t5"];
 	//record producer variable names
-	var bdl = ["b1" , "b2", "b3" , "b4" , "b5"];
+	var field3 = ["b1" , "b2", "b3" , "b4" , "b5"];
     //choice list values
     var choice = [1 , 2 , 3 , 4, 5];
     
@@ -34,14 +34,17 @@ function glideInit() {
 for (var i = 0; i < field.length; i++) {
     if(g_form.getValue(field[i]) != ""){
         glideInit();
-        gr.u_pending_processing = g_form.getValue(field[i]);
-        gr.u_oldest_date_received = g_form.getValue(odr[i]);
-        gr.u_business_days_backlogged = g_form.getValue(bdl[i]);
-        gr.u_tag_container = choice[i];
+        gr.<record producer variable name> = g_form.getValue(field[i]);
+        gr.<record producer variable name> = g_form.getValue(field2[i]);
+        gr.<record producer variable name> = g_form.getValue(field3[i]);
+        gr.<choice list> = choice[i];
         gr.insert();
     }
     
     
     
-}
+} 
+    
+    
+    
 }
