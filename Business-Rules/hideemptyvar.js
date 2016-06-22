@@ -4,6 +4,7 @@
 //When: display
 //Condition: !RP.isPopup()
 //Initialize the scratchpad variable
+//combine this with hideemptyvar.js client script
 g_scratchpad.emptyVars = '';
 
 //Check to see if a variable pool exists
