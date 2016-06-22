@@ -1,6 +1,6 @@
 
 //Name: Hide Empty Variables
-/Table: Task
+//Table: Task
 //When: display
 //Condition: !RP.isPopup()
 //Initialize the scratchpad variable
