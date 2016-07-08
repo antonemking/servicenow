@@ -1,3 +1,6 @@
+//author Bayview
+//functions for performing various tasks in the service catalog. Mainly workflow scripting
+
 var catalogServices = Class.create();
 catalogServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 	airCardInventoryClient: function(){
