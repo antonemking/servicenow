@@ -1,3 +1,5 @@
+//author servicenow
+//hide variable set within an order guide
 function onLoad() {
     var item = $("current_item");
     var guide = $("sysparm_guide");
