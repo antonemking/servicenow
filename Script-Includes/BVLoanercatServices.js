@@ -1,3 +1,6 @@
+//author John Chooi
+//functions for a loaner request item and logic for removing that item from stock and updating inventory levels
+
 var BVLoanercatServices = Class.create();
 BVLoanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 	loanerInventoryClient: function(table){
