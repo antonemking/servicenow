@@ -1,3 +1,4 @@
+//author Antone king
 //this script will create records based on the input fields filled out in the record producer. Creating multiple records from one
 //submit of a record producer. Useful for data entry forms that will insert data for data collection around Performance Analytics.
 //the below Catalog Client Script will generate two records upon submittal.
