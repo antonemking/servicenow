@@ -1,5 +1,5 @@
 <h1>ServiceNow-Scripts</h1>
-<p>Useful Scripts that I have developed to accomplish various tasks.</p>
+<p>Useful Scripts that I have developed or curated to accomplish various tasks.</p>
 
 <ul>
 <li>Transform Scripts</li>
