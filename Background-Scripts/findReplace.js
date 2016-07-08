@@ -1,4 +1,6 @@
+//author antone king
 //Replace 'table name here','query here if needed','field name here' ith your parameters for the findreplace
+//find replace anything in your instance
 
 removeAnom('table', 'encodedquery', 'element field')
 function removeAnom(table, query, field){
