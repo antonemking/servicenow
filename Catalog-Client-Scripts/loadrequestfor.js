@@ -1,3 +1,6 @@
+//author Antone king
+//load the current cart user into a reference varaible on the catalog item form
+
 function onLoad() { 
 var userid = g_user.userName;
 var cart = new GlideRecord('sc_cart');
