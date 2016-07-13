@@ -1,13 +1,16 @@
-var BVloanercatServices = Class.create();
-BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
-	loanerInventoryClient: function(){
+//author John Chooi
+//functions for a loaner request item and logic for removing that item from stock and updating inventory levels
+
+var BVLoanercatServices = Class.create();
+BVLoanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+	loanerInventoryClient: function(table){
 		var location = this.getParameter("sysparm_location");
-		var inventory = this.loanerInventory(location);
+		var inventory = this.loanerInventory(table,location);
 		return inventory;
 	},
-	loanerInventory: function(location){
+	loanerInventory: function(table,location){
 		var inventory = 0;
-		var itemCount = new GlideAggregate("u_loaner_laptops");
+		var itemCount = new GlideAggregate(table);
 		itemCount.addQuery("u_location",location);
 		itemCount.addEncodedQuery("u_request_itemISEMPTY");
 		itemCount.addAggregate("COUNT");
@@ -17,11 +20,11 @@ BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 		}
 		return inventory;
 	},
-	userHasloaner: function(){
+	userHasloaner: function(table){
 		var userID = this.getParameter("sysparm_user");
 		var loaner_count = 0;
 		var rtnValue = "false";
-		var loaner = new GlideAggregate("u_loaner_laptops");
+		var loaner = new GlideAggregate(table);
 		loaner.addEncodedQuery("u_request_item.active=true^u_request_item.requested_for="+userID);
 		loaner.addAggregate("COUNT");
 		loaner.query();
@@ -33,9 +36,9 @@ BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 		}
 		return rtnValue;
 	},
-	getloanerNumber: function (ritm){
+	getloanerNumber: function (table,ritm){
 		var loanerID = "";
-		var loaner = new GlideAggregate("u_loaner_laptops");
+		var loaner = new GlideAggregate(table);
 		loaner.addQuery("u_request_item",ritm);
 		loaner.query();
 		while (loaner.next()){
@@ -43,8 +46,8 @@ BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 		}
 		return loanerID;
 	},
-	releaseloaner: function(ritm){
-		var loaner = new GlideAggregate("u_loaner_laptops");
+	releaseloaner: function(table,ritm){
+		var loaner = new GlideAggregate(table);
 		loaner.addQuery("u_request_item",ritm);
 		loaner.query();
 		while (loaner.next()){
@@ -89,12 +92,12 @@ BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 		}
 		return groupID;
 	},
-	getLocationloaner: function(task_id){
+	getLocationloaner: function(table,task_id){
 		var loaner_id ="";
 		var task = new GlideRecord("sc_task");
 		if (task.get(task_id)){
 			var location = task.request_item.u_physical_office;
-			var loaner = new GlideRecord("u_loaner_laptops");
+			var loaner = new GlideRecord(table);
 			loaner.addQuery("u_location",location);
 			loaner.addEncodedQuery("u_request_itemISEMPTY");
 			loaner.query();
@@ -104,5 +107,5 @@ BVloanercatServices.prototype = Object.extendsObject(AbstractAjaxProcessor, {
 		}
 		return 'sys_idIN'+loaner_id;
 	},
-	type: 'BVloanercatServices'
+	type: 'BVLoanercatServices'
 });
