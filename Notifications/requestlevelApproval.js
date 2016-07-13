@@ -14,7 +14,7 @@ if (req.get(current.sysapproval)){
 	template.print("<p>State: " + req.request_state+"</p>");
 	//body = "<p>Requestor: " + req.requested_for.name+"</p>";
 	//body += "<p>State: " + req.request_state+"</p>";
-	body+="<hr/><br><p>*Click on the item numbers below to approve each individual item or the buttons below to approve or reject the complete order."+"</p>";
+	body+="<hr/><br><p>*Click on the buttons below to approve or reject the complete order."+"</p>";
 	body+="<p>Description: " + req.description;
 	var ritm = new GlideRecord("sc_req_item");
 	ritm.addQuery("request",req.sys_id);
@@ -22,7 +22,8 @@ if (req.get(current.sysapproval)){
 	while (ritm.next()){
 		total += ritm.quantity * ritm.price;
 		itemInfo = " - " +ritm.cat_item.name + " - " + "Qty: " + ritm.quantity + " Price(ea): " + "$" + ritm.price;
-		body += "<p><a href=" + baseURL + itemURL + ritm.sys_id + "> " + ritm.number + "</a>"+ itemInfo +"</p>";
+		//body += "<p><a href=" + baseURL + itemURL + ritm.sys_id + "> " + ritm.number + "</a>"+ itemInfo +"</p>";
+		body += "<p>" + baseURL + itemURL + ritm.sys_id + ritm.number + itemInfo + "</p>";
 		//antone king update to add ritm variables
 		template.print("<hr/><br><b>Summary of Requested item:</b>" +  "<br>" ); 
 		template.print("<p>" + ritm.number + ": " + ritm.quantity + " X " + ritm.cat_item.getDisplayValue() + "</p>");
