@@ -32,7 +32,7 @@ function getPrincipalName(){
 	var scTask= new GlideRecord('sc_task');
 	scTask.addQuery('request_item',current.sys_id);
 	scTask.addEncodedQuery(strQuery); //aking - Grab new query string
-	scTask.addNotNullQuery('u_princiapl_name'); //aking - find all tasks with principal name supplied
+	scTask.addNotNullQuery('u_principal_name'); //aking - find all tasks with principal name supplied
 	scTask.query();
 	while (scTask.next()) {
 		//workflow.scratchpad.u_employee_email_address= createNewAccountTask.u_employee_email_address;
