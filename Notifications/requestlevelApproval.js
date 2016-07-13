@@ -23,7 +23,7 @@ if (req.get(current.sysapproval)){
 		total += ritm.quantity * ritm.price;
 		itemInfo = " - " +ritm.cat_item.name + " - " + "Qty: " + ritm.quantity + " Price(ea): " + "$" + ritm.price;
 		//body += "<p><a href=" + baseURL + itemURL + ritm.sys_id + "> " + ritm.number + "</a>"+ itemInfo +"</p>";
-		body += "<p>" + baseURL + itemURL + ritm.sys_id + ritm.number + itemInfo + "</p>";
+		body += "<p>" + "<b>" + ritm.number + "</b>" + itemInfo + "</p>";
 		//antone king update to add ritm variables
 		template.print("<hr/><br><b>Summary of Requested item:</b>" +  "<br>" ); 
 		template.print("<p>" + ritm.number + ": " + ritm.quantity + " X " + ritm.cat_item.getDisplayValue() + "</p>");
