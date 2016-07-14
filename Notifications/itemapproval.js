@@ -27,3 +27,5 @@ if (item.get(current.sysapproval)){
 	var misc = cat_services.ritmVariableInfo(current.sysapproval);
 	template.print(catalogItem + "<br/> " + misc);
 }
+
+
