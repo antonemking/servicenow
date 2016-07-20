@@ -1,3 +1,7 @@
+
+
+
+//condition email.subject.indexOf("BPM") == 0 || email.subject.indexOf("HRIS Employee") == 0 || email.subject.indexOf("Workday Employee") == 0
 gs.include('Cart');
 createRequest();
 function createRequest() {
@@ -55,6 +59,11 @@ function createRequest() {
     var date_s = date_dmy.split("/");
     var date_v = date_s[2] + "-" + date_s[0] + "-" + date_s[1];
     
+    //Set Call Type
+    var call_type = msg.indexOf("Call Type");
+    var call_uc = msg.substring(call_type + 10);
+    var call_v = call_uc.replace(/<[^>]*>/gi, " ").split("  ")[0];
+    
     //Set supervisor name
     var user = new GlideRecord('sys_user');
     user.addQuery('email', sup_v);
@@ -71,7 +80,8 @@ function createRequest() {
     cart.setVariable(item, 'lut_located', loc_v); 
     cart.setVariable(item, 'lut_EmployeeType', emp_v); 
     cart.setVariable(item, 'lut_superemail', sup_v);
-    cart.setVariable(item, 'lut_eff_date', date_v); 
+    cart.setVariable(item, 'lut_eff_date', date_v);
+    cart.setVariable(item, 'lut_onboard_calltype', call_v);
     
     var cartmsg = "Received from: " + email.origemail + "\n\n" + msg_b;
     cart.setVariable(item, 'lut_ob_description', cartmsg);
