@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<style>
+		
+		.numberCircle {
+		border-radius: 50%;
+		behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+		margin: 0 auto;
+	
+		width: 144px;
+		height: 144px;
+		padding: 12px;
+		
+
+		//background: #fff;
+		border: .2px solid #71e279;
+		color: black;
+		text-align: center;
+
+		
+	   }
+	
+		div p {
+		color:#666;
+		
+		}
+	
+		
+	</style>
+	
+	<div class="container">
+		<div class="row">
+		<div class="col-md-9">
+			
+			<div class="col-md-3"> 
+				<div class="numberCircle">
+				<h1>{2.3}</h1>
+				<p>Client Avg</p>
+				</div>
+			</div>
+			<div class="col-md-3"> 
+				<div class="numberCircle">
+				<h1>{5}</h1>
+				<p>Current Score</p>
+				</div>
+			</div>
+			<div class="col-md-3"> 
+				<div class="numberCircle">
+				<h1>{3.5}</h1>
+				<p>Your Avg</p>
+				</div>
+				
+			</div>
+			
+			</div>
+			
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+
+</j:jelly>
