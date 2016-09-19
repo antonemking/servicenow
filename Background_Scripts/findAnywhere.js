@@ -1,5 +1,7 @@
 //Courtesy of http://snprotips.com/blog/sncprotips/2015/12/locate-any-record-in-any-table-by-sysidhtml
 
+//aking -  recently used this to find a hidden sysid that represented a duplicate domain in the domain picklist
+
 function findAnywhere(sysid, html) {
     if (html !== true && html !== 'true') { html = false; }
     var check;

@@ -1,4 +1,22 @@
-var proj = source.u_project;
+//aking - data source file parse. This takes a miscellaneous identifer slices it and matches it with a project
+
+var dep = source.u_miscellaneous;
+var proj = dep.slice(2,5);
+
+var gr = new GlideRecord('u_prwt_project');
+gr.addQuery('u_number', proj);
+gr.query();
+while(gr.next()){
+	if (proj == 902 || proj == 904 || proj == 905){
+		answer = "Corporate";
+	}
+answer = gr.u_name;
+}	
+
+
+
+// aking - depricated
+/*var proj = source.u_project;
 var gr = new GlideRecord('u_prwt_project');
 gr.addQuery('u_number', proj);
 gr.query();

@@ -1,3 +1,6 @@
+//aking - generate a pdf from html elemets with the content class.
+
+
 function createPDF() {
     var pdf = new jsPDF('p', 'pt', 'letter');
     
