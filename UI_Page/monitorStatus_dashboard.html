@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+    
+<g2:evaluate var="jvar_stamp">
+    var gr = new GlideRecord('sys_ui_script');
+        gr.orderByDesc('sys_updated_on');
+        gr.query();
+        gr.next();
+        gr.getValue('sys_updated_on');
+</g2:evaluate>
+<g:evaluate>
+    var d = new Date();
+    var stringDate = d.toString();
+</g:evaluate>
+
+
+<g:requires name="angularjs-1.4.9.min.jsdbx"/>
+<g:requires name="aking_system_status.app.jsdbx" params="cache=$[jvar_stamp]"/>
+<g:requires name="aking_system_status_model.jsdbx" params="cache=$[jvar_stamp]" />
+<g:requires name="aking_system_status_ctrl.jsdbx" params="cache=$[jvar_stamp]" />
+<g:requires name="aking_template_service.jsdbx" params="cache=$[javr_stamp]" />
+    
+<link href="3bf359a24f0b66007849cb4e0210c71e.cssdbx" rel="stylesheet" type="text/css"></link>
+    
+    <div class="inner">
+        
+        <div class="header clearix">
+            <div class="heading">
+                <span>MAS system status</span>
+            </div>
+        </div>
+        <br></br>
+        
+        <div class="content">
+            <div class="white box">
+                <div class="largestatus">
+                    <div class="title-wrapper">
+                        <span class="title">All services are online. </span>
+                        <label class="status-time">
+                        <span class="current-time">As of ${stringDate}</span>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="statistics">
+                <div class="inner-gradient">
+                <div class="uptime-graphs box-inner">
+                    <div ng-app="mcdApp">
+                        <div ng-controller="SystemStatCtrl" data-ng-init="getTemplate()">
+                            
+                            <!-- include app templates below this line -->
+                            <div ng-include="getTemplate('aking_RFM2')" />
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</j:jelly>

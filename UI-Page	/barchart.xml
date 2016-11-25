@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<g:evaluate>
+  var times = []; //Dates used in the chart
+  var changes = [];//Change data
+  var incidents = [];//Incident data
+  var changesJson = '['; //Change data to JSON used for chart data.
+  var incidentsJson = '['; //Incident data to JSON used for chart data.
+  //Get From and To dates from the URL.
+  var sFrom = RP.getParameterValue('from')+'' != '' ? RP.getParameterValue('from')+' 00:00:00' : gs.daysAgo(5);
+  var sTo = RP.getParameterValue('to')+'' != '' ? RP.getParameterValue('to')+' 00:00:00' : gs.daysAgo(0);
+  //Query the sys_trend table for open changes
+  var grChanges = new GlideRecord('sys_trend');
+  grChanges.addQuery('name', 'Open Change Tickets');
+  grChanges.addEncodedQuery("collected>=javascript:gs.dateGenerate('"+sFrom+"')^collected&lt;=javascript:gs.dateGenerate('"+sTo+"')^collectedDATEPART1 am@javascript:gs.datePart('hour', '1','EE')");
+  grChanges.orderBy('field_value');
+  grChanges.query();
+  var act = 0;   
+  while (grChanges.next()) {
+    changes.push(grChanges.value.toString());
+    changesJson += '{"y": '+parseInt(grChanges.value.toString(), 10)+', "name": "'+grChanges.collected+'", "drilldown": "drillChanges"},';
+    times.push(grChanges.collected.toString());
+    //Get the trend data for incident on the same date.
+    var grIncs = new GlideRecord('sys_trend');
+    grIncs.addQuery('name', 'Open Incident Tickets');
+    grIncs.addQuery('collected', grChanges.collected);
+    grIncs.query();
+    while(grIncs.next()){
+      incidents.push(grIncs.value.toString());
+      incidentsJson += '{"y": '+parseInt(grIncs.value.toString(), 10)+', "name": "'+grChanges.collected+'", "drilldown": "group1"},';
+    }
+    if(grIncs.getRowCount() == 0)
+      incidentsJson += '{"y": '+parseInt(0, 10)+', "name": "'+grChanges.collected+'", "drilldown": "group1"},';
+  }
+  changesJson = changesJson.slice(0,-1);
+  changesJson += ']';
+  incidentsJson = incidentsJson.slice(0,-1);
+  incidentsJson += ']';
+
+  changes = changes.join(',');
+  times = times.join(',');
+  incidents = incidents.join(',');
+</g:evaluate>
+
+<script eval="true">
+  //create javascripts vars from the <g:evaluate> section.
+  var times = "${times}";
+  times = times.split(',');
+  var changesJson = '${changesJson}';
+  if(changesJson != ']')
+  changesJson = $j.parseJSON(changesJson);
+  var incidentsJson = '${incidentsJson}';
+  if(incidentsJson != ']')
+  incidentsJson = $j.parseJSON(incidentsJson);
+
+  var changes = "${changes}";
+  changes = changes.split(',');
+  for(var i=0; i != changes.length; i++) { changes[i] = parseInt(changes[i], 10); }
+
+  var incidents = "${incidents}";
+  incidents = incidents.split(',');
+  for(var i=0; i != incidents.length; i++) { incidents[i] = parseInt(incidents[i], 10); }
+
+  //Set Highcharts options 
+  document.observe("dom:loaded", function() {
+  Highcharts.setOptions({
+     chart: {
+        backgroundColor: '#FFF',
+        borderWidth: 1,
+        borderColor: '#FFF',
+        plotBackgroundColor: '#fff',
+        plotShadow: false,
+        plotBorderWidth: 1,
+        plotBorderColor: '#E41E26'
+     },
+     credits: {
+              enabled: false
+        },
+     title: {
+        style: {
+           color: '#E41E26',
+           font: 'bold 12px "Trebuchet MS", Verdana, sans-serif'
+        }
+     },
+     subtitle: {
+        style: {
+           color: '#363534',
+           font: 'bold 10px "Trebuchet MS", Verdana, sans-serif'
+        }
+     },
+     xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: '#E41E26',
+        gridLineWidth: 0,
+        labels: {
+           style: {
+              color: '#363534',
+              font: '10px Trebuchet MS, Verdana, sans-serif'
+           }
+        },
+        title: {
+           style: {
+              color: '#363534',
+              fontWeight: 'bold',
+              fontSize: '10px',
+              fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+
+           }
+        }
+     },
+     yAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: '#E41E26',
+        gridLineWidth: 0, 
+        labels: {
+           style: {
+              color: '#363534',
+              font: '9px Trebuchet MS, Verdana, sans-serif'
+           }
+        },
+        title: {
+           style: {
+              color: '#363534',
+              fontWeight: 'bold',
+              fontSize: '9px',
+              fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+           }
+        }
+     },
+     legend: {
+        itemStyle: {
+           font: '9pt Trebuchet MS, Verdana, sans-serif',
+           color: 'black'
+
+        },
+        itemHoverStyle: {
+           color: '#039'
+        },
+        itemHiddenStyle: {
+           color: 'gray'
+        }
+     },
+     labels: {
+        style: {
+           color: '#fff'
+        }
+     },
+
+     navigation: {
+        buttonOptions: {
+           theme: {
+              stroke: '#CCCCCC'
+           }
+        }
+     }
+
+  });
+     var chart2 = new Highcharts.Chart({
+
+              colors: ['#F27D02', '#0277F2'],
+              chart: {
+                  renderTo: 'fixrate',
+                  type: 'column',
+                  zoomType: 'x'
+              },
+              title: {
+                  text: 'Open Tickets'
+              },
+              xAxis: {
+                  type: 'category'
+              },
+              yAxis: {
+
+              },
+              legend: {
+                  backgroundColor: '#FFFFFF',
+                  reversed: false
+              },
+              plotOptions: {  
+                  series: [{  
+                      stacking: 'normal',    
+                      dataLabels: {  
+                              enabled: true,  
+                              color: '#fff',  
+                              format: '{point.x}'  
+                          } 
+                  },  ]
+                     
+              },
+                  series: [{
+                  name: 'Open Incident Tickets',
+                  data: incidentsJson,
+                  pointWidth:22,
+                  dataLabels: {
+                          style: {
+                              fontSize: '0px',
+                              color: '#FA0515'
+                          },
+                              crop:false
+                      }
+              },{
+                  name: 'Open Change Tickets',
+                  data: changesJson,
+                  pointWidth:22,
+                  dataLabels: {
+                          style: {
+                              fontSize: '0px',
+                              color: '#2374F7'
+                          },
+                              crop:false
+                      }
+                
+              }],
+              drilldown: {
+                series: [{
+                      id: 'group1',
+                      name: 'Open Changes per Assignment Group',
+                      data: [
+                          ['SAP', 4],
+                          ['PeopleSoft', 2],
+                          ['Exchange', 1],
+                          ['Windows', 2],
+                          ['Apple', 1]
+                      ]
+                  },{
+                      id: 'drillChanges',
+                      name: 'Open Changes per Priority',
+                      data: [
+                          ['P1', 4],
+                          ['P2', 2],
+                          ['P3', 7],
+                          ['P4', 2],
+                          ['P5', 3]
+                      ]
+                  }]
+              }
+              
+          });
+  });
+
+</script>
+
+<script language="javascript" src="/scripts/prototype-adapter.jsx" />
+<script language="javascript" src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script language="javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+<script language="javascript" src="https://code.highcharts.com/highcharts-3d.js"></script>
+<div id="highwrapper" style="width: 940px; height: 420px; position:relative;" >
+<div id="fixrate" ></div>
+</div>
+
+</j:jelly>
