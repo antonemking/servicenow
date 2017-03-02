@@ -1,6 +1,7 @@
 /*
 All checklist items must be complete before task can be closed
 
+Before - update
 */
 
 (function executeRule(current, previous /*null when async*/) {

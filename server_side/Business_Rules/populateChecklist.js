@@ -2,6 +2,14 @@
 New feature in helsinki allows for checklist creation in support tasks. This script auto populates checklist items in the task.
 */
 
+/*
+Incase you have multiple tasks being created through workflow and only a select few need checklists use a conditon like so (must populate your short_description with a keyword) 
+
+Before - insert
+current.description.indexOf('checklist') != -1
+
+*/
+
 (function executeRule(current, previous /*null when async*/) {
 var taskArr = [];
 	gs.log(">>> Request item is " + current.request_item.cat_item);
