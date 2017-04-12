@@ -19,6 +19,8 @@
  *  Usage: Set up a scheduled job to run this code on a schedule, especially if you maintain your user profiles from an LDAP feed.
  *
  *  Limitations: If you are using non-standard roles from baseline, then this script will not work for you. You will need to tailor it accordingly.
+ *
+ *  Tag sys_users with admin, approver, fulfuller, reuqester, or other
  */
 
 checkRoles();
@@ -32,8 +34,8 @@ function checkRoles() {
 
 		var grUser = new GlideRecord("sys_user");
 		
-		if (!grUser.isValidField('u_type')) {
-			gs.log('The scheduled job "User Role Checker" cannot find the "u_type" field defined in the "sys_user" table');
+		if (!grUser.isValidField('x_20227_dashboard_u_type')) {
+			gs.info('The scheduled job "User Role Checker" cannot find the "u_type" field defined in the "sys_user" table');
 			return ;
 		}
 			
@@ -47,39 +49,39 @@ function checkRoles() {
 
 			// If the user has no roles, then they are a 'requester'.
 			if (roleCount === 0) {
-				grUser.u_type = 'requester';
+				grUser.x_20227_dashboard_u_type = 'requester';
 				grUser.update();
 				continue;
 			
 			// If the user has only ONE role and it's 'approver_user', then they are an 'approver'.
 			} else if (roleCount == 1 && arrayUtil.contains(theUserRoles, 'approver_user')) {
-				grUser.u_type = 'approver';
+				grUser.x_20227_dashboard_u_type = 'approver';
 				grUser.update();
 				continue;
 			
 			// If the user has multiple roles and one of them is 'admin', then they are an 'administrator'.
 			} else if (roleCount > 0 && arrayUtil.contains(theUserRoles, 'admin')) {
-				grUser.u_type = 'administrator';
+				grUser.x_20227_dashboard_u_type = 'administrator';
 				grUser.update();
 				continue;
 			
 			// If the user has more than one role and did not have the 'admin' role, then they are a 'fulfiller'.
 			} else if (roleCount > 0) {
-				grUser.u_type = 'fulfiller';
+				grUser.x_20227_dashboard_u_type = 'fulfiller';
 				grUser.update();
 				continue;
 				
 			// If none of the previous conditions were met, then consider the user as 'other'.
 			} else {
-				grUser.u_type = 'other';
+				grUser.x_20227_dashboard_u_type = 'other';
 				grUser.update();
 			}
 		}
 
-		gs.log("User Role Checker processed " + totalUsers + " user records on " + gs.nowDateTime());
+		gs.info("User Role Checker processed " + totalUsers + " user records on " + gs.nowDateTime());
 
 	} catch (e) {
-		gs.log("Error in scheduled job 'User Role Checker' on line " + e.lineNumber + ": " + e);
+		gs.info("Error in scheduled job 'User Role Checker' on line " + e.lineNumber + ": " + e);
 	}
 }
 
@@ -97,6 +99,6 @@ function getRoles(userId) {
 		}
 		return theRoles;
 	} catch (e) {
-		gs.log("Error in scheduled job 'User Role Checker > getRoles()' on line " + e.lineNumber + ": " + e);
+		gs.info("Error in scheduled job 'User Role Checker > getRoles()' on line " + e.lineNumber + ": " + e);
 	}
 }
